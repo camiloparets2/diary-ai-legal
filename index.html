@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Diary AI privacy, support, subscription, and account deletion information." />
+    <title>Diary AI — Privacy, support, and deletion</title>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="shell">
+        <p class="eyebrow">Diary AI</p>
+        <h1>Privacy, support, and account deletion</h1>
+        <p>Public information for the Android closed beta. English and Spanish are provided below.</p>
+        <nav aria-label="Page sections">
+          <a href="#privacy">Privacy</a><a href="#subscriptions">Subscriptions</a><a href="#delete">Delete account</a><a href="#support">Support</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="shell content">
+      <section id="privacy" class="card">
+        <p class="eyebrow">English</p>
+        <h2>Privacy notice</h2>
+        <p>Diary AI is operated by <strong data-operator></strong>. The service is for adults aged 18 and older and is not therapy, medical care, or a diagnostic service.</p>
+        <p>When you explicitly start a diary session, the Android app records microphone input with a persistent foreground notification. Silence is discarded on-device. Speech segments are encrypted locally, uploaded to private Appwrite storage, and processed by Google Gemini to create transcripts, summaries, reflections, and answers. Diary text stays in Appwrite. Pinecone stores user-isolated vectors with identifiers and non-content references, not diary text.</p>
+        <p>We use Appwrite for authentication, data, files, and Functions; paid Google Gemini for AI processing; Pinecone for semantic retrieval; RevenueCat and Google Play for subscriptions; and Firebase for content-free push notifications and crash diagnostics. Diary AI is not end-to-end encrypted because the backend must read content to process it.</p>
+        <p>Raw audio is deleted after successful processing. Server-side audio and Gemini copies are targeted for deletion within 48 hours, and export archives expire within 24 hours after becoming ready. A powered-off device removes overdue local files at its next operating-system or app execution opportunity. Deleted data may remain in encrypted backups for up to <strong data-backup-days></strong> days.</p>
+        <p>You can view, correct, export, and delete your diary. Account deletion disables access immediately and queues retryable deletion from Appwrite, Gemini, Pinecone, RevenueCat, push-token records, and owner files.</p>
+        <p>Effective <strong data-effective-date></strong>.</p>
+      </section>
+
+      <section class="card" lang="es">
+        <p class="eyebrow">Español</p>
+        <h2>Aviso de privacidad</h2>
+        <p>Diary AI es operado por <strong data-operator></strong>. El servicio es únicamente para adultos de 18 años o más y no es terapia, atención médica ni un servicio de diagnóstico.</p>
+        <p>Cuando inicia explícitamente una sesión, la aplicación Android graba el micrófono con una notificación permanente. El silencio se descarta en el dispositivo. Los segmentos de voz se cifran localmente, se cargan en el almacenamiento privado de Appwrite y Google Gemini los procesa para crear transcripciones, resúmenes, reflexiones y respuestas. El texto permanece en Appwrite. Pinecone conserva vectores aislados por usuario con identificadores y referencias sin contenido, no el texto del diario.</p>
+        <p>Usamos Appwrite para autenticación, datos, archivos y Functions; Google Gemini de pago para procesamiento de IA; Pinecone para recuperación semántica; RevenueCat y Google Play para suscripciones; y Firebase para notificaciones sin contenido y diagnósticos de fallos. Diary AI no usa cifrado de extremo a extremo porque el servidor debe leer el contenido para procesarlo.</p>
+        <p>El audio original se elimina después del procesamiento correcto. Las copias de audio del servidor y de Gemini se eliminan dentro de un objetivo máximo de 48 horas, y los archivos de exportación vencen dentro de 24 horas desde que están listos. Un dispositivo apagado elimina los archivos locales vencidos en la siguiente oportunidad de ejecución. Los datos eliminados pueden permanecer en copias cifradas hasta <strong data-backup-days></strong> días.</p>
+        <p>Puede ver, corregir, exportar y eliminar su diario. La eliminación de la cuenta deshabilita el acceso inmediatamente y pone en cola la eliminación reintentable de Appwrite, Gemini, Pinecone, RevenueCat, los registros de tokens y los archivos del propietario.</p>
+        <p>Vigente desde <strong data-effective-date></strong>.</p>
+      </section>
+
+      <section id="subscriptions" class="card">
+        <h2>Subscriptions / Suscripciones</h2>
+        <p>Diary Plus is planned at US$11.99 monthly or US$89.99 annually, with localized Google Play pricing where available. Subscriptions renew automatically unless canceled through Google Play. Canceling stops renewal but access continues until the paid period expires. Free access remains available.</p>
+        <p lang="es">Diary Plus está previsto a US$11,99 al mes o US$89,99 al año, con precios locales de Google Play cuando estén disponibles. La suscripción se renueva automáticamente salvo que se cancele en Google Play. La cancelación detiene la renovación, pero el acceso continúa hasta el final del período pagado. El acceso gratuito continúa disponible.</p>
+      </section>
+
+      <section id="delete" class="card danger-zone">
+        <p class="eyebrow">Account deletion / Eliminación de cuenta</p>
+        <h2>Delete your Diary AI account without reinstalling the app</h2>
+        <p>Authenticate with the same Email OTP address used in Diary AI. After confirmation, access is disabled immediately and deletion is processed asynchronously. This action cannot be undone.</p>
+        <p lang="es">Autentíquese con la misma dirección de código por correo usada en Diary AI. Después de confirmar, el acceso se deshabilita inmediatamente y la eliminación se procesa de forma asíncrona. Esta acción no se puede deshacer.</p>
+        <div id="delete-form" class="form-grid">
+          <label>Email address<input id="email" type="email" autocomplete="email" required /></label>
+          <button id="send-code" type="button">Send verification code</button>
+          <div id="verification" hidden>
+            <label>Six-digit code<input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" /></label>
+            <button id="verify-code" type="button">Verify code</button>
+          </div>
+          <div id="confirmation" hidden>
+            <label>Type DELETE to confirm<input id="confirmation-text" autocomplete="off" /></label>
+            <button id="delete-account" class="destructive" type="button">Permanently delete account and diary</button>
+          </div>
+          <p id="status" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section id="support" class="card">
+        <h2>Support and privacy contact / Soporte y privacidad</h2>
+        <p>Email: <a data-support-link><span data-support-email></span></a></p>
+        <p>Operator mailing address: <span data-mailing-address></span></p>
+      </section>
+    </main>
+    <footer class="shell">Diary AI closed beta · <span data-effective-date></span></footer>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

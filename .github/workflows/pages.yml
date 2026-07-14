@@ -1,0 +1,46 @@
+name: Publish legal site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          VITE_OPERATOR_NAME: ${{ vars.OPERATOR_NAME }}
+          VITE_SUPPORT_EMAIL: ${{ vars.SUPPORT_EMAIL }}
+          VITE_MAILING_ADDRESS: ${{ vars.MAILING_ADDRESS }}
+          VITE_EFFECTIVE_DATE: ${{ vars.EFFECTIVE_DATE }}
+          VITE_BACKUP_RETENTION_DAYS: ${{ vars.BACKUP_RETENTION_DAYS }}
+          VITE_APPWRITE_ENDPOINT: ${{ vars.APPWRITE_ENDPOINT }}
+          VITE_APPWRITE_PROJECT_ID: ${{ vars.APPWRITE_PROJECT_ID }}
+          VITE_APPWRITE_API_FUNCTION_ID: diary-api
+          VITE_LEGAL_REVIEWED: ${{ vars.LEGAL_REVIEWED }}
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
