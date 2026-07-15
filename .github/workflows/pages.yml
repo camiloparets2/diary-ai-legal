@@ -16,17 +16,21 @@ concurrency:
 
 jobs:
   deploy:
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm run check
       - run: npm run build
         env:
           VITE_OPERATOR_NAME: ${{ vars.OPERATOR_NAME }}
@@ -38,9 +42,9 @@ jobs:
           VITE_APPWRITE_PROJECT_ID: ${{ vars.APPWRITE_PROJECT_ID }}
           VITE_APPWRITE_API_FUNCTION_ID: diary-api
           VITE_LEGAL_REVIEWED: ${{ vars.LEGAL_REVIEWED }}
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

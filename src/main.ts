@@ -1,5 +1,6 @@
 import { Account, Client, ExecutionMethod, Functions, ID } from 'appwrite';
 
+import { assertDeletionAccepted, normalizeEmail, readDeletionChallenge, serializeDeletionChallenge, validateOtpCode } from './deletion-flow';
 import './style.css';
 
 const configuration = {
@@ -34,15 +35,13 @@ const confirmation = document.querySelector<HTMLElement>('#confirmation')!;
 const status = document.querySelector<HTMLElement>('#status')!;
 const challengeKey = 'diary-ai:legal-delete-challenge';
 
-type Challenge = { userId: string; email: string; createdAt: number };
-
 function message(value: string, failed = false) {
   status.textContent = value;
   status.dataset.failed = String(failed);
 }
 
 function normalizedEmail() {
-  return email.value.trim().toLowerCase();
+  return normalizeEmail(email.value);
 }
 
 document.querySelector<HTMLButtonElement>('#send-code')!.addEventListener('click', async () => {
@@ -51,8 +50,7 @@ document.querySelector<HTMLButtonElement>('#send-code')!.addEventListener('click
     if (!address || !email.checkValidity()) throw new Error('Enter the Email OTP address used by your Diary AI account.');
     message('Sending a verification code…');
     const token = await account.createEmailToken({ userId: ID.unique(), email: address, phrase: true });
-    const challenge: Challenge = { userId: token.userId, email: address, createdAt: Date.now() };
-    sessionStorage.setItem(challengeKey, JSON.stringify(challenge));
+    sessionStorage.setItem(challengeKey, serializeDeletionChallenge(token.userId, address));
     email.readOnly = true;
     verification.hidden = false;
     message('Check your inbox for the six-digit verification code.');
@@ -64,14 +62,10 @@ document.querySelector<HTMLButtonElement>('#send-code')!.addEventListener('click
 
 document.querySelector<HTMLButtonElement>('#verify-code')!.addEventListener('click', async () => {
   try {
-    const stored = sessionStorage.getItem(challengeKey);
-    const challenge = stored ? JSON.parse(stored) as Challenge : null;
-    if (!challenge || challenge.email !== normalizedEmail() || Date.now() - challenge.createdAt > 15 * 60_000) {
-      throw new Error('The verification request expired. Reload this page and request a new code.');
-    }
-    if (!/^\d{6}$/.test(code.value)) throw new Error('Enter the six-digit code from your email.');
+    const challenge = readDeletionChallenge(sessionStorage.getItem(challengeKey), normalizedEmail());
+    const secret = validateOtpCode(code.value);
     message('Verifying…');
-    await account.createSession({ userId: challenge.userId, secret: code.value });
+    await account.createSession({ userId: challenge.userId, secret });
     sessionStorage.removeItem(challengeKey);
     confirmation.hidden = false;
     verification.hidden = true;
@@ -96,8 +90,7 @@ document.querySelector<HTMLButtonElement>('#delete-account')!.addEventListener('
       method: ExecutionMethod.DELETE,
       headers: { 'content-type': 'application/json', 'x-appwrite-user-jwt': jwt.jwt, 'x-diary-app-version': '1.0.0' },
     });
-    const response = execution.responseBody ? JSON.parse(execution.responseBody) as { accepted?: boolean; error?: string } : {};
-    if (execution.responseStatusCode !== 202 || response.accepted !== true) throw new Error(response.error ?? 'The deletion request was not accepted.');
+    assertDeletionAccepted(execution.responseStatusCode, execution.responseBody);
     await account.deleteSession({ sessionId: 'current' }).catch(() => undefined);
     email.disabled = true;
     confirmationText.disabled = true;
