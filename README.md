@@ -4,6 +4,8 @@ This directory is the source for the public `camiloparets2/diary-ai-legal` GitHu
 
 Production builds intentionally fail until all public operator values are supplied and `VITE_LEGAL_REVIEWED=true` is set after English and Spanish legal review. The deletion flow uses Appwrite Email OTP, creates a 15-minute JWT, and calls the existing authenticated `DELETE /account` Function route. It never contains provider or Appwrite API secrets.
 
+The Pages deployment job is skipped until the repository variable `LEGAL_REVIEWED` is exactly `true`. This keeps `main` green without publishing placeholders; after review, enable Pages with GitHub Actions as its source and dispatch the publish workflow.
+
 Before enabling Pages:
 
 1. Register `camiloparets2.github.io` as a Web platform in both Appwrite targets.
