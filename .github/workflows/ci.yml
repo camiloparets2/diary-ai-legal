@@ -27,7 +27,7 @@ jobs:
       VITE_APPWRITE_API_FUNCTION_ID: diary-api
       VITE_LEGAL_REVIEWED: 'true'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - uses: actions/setup-node@v6
