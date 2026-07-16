@@ -8,7 +8,7 @@ const configuration = {
   supportEmail: import.meta.env.VITE_SUPPORT_EMAIL as string,
   mailingAddress: import.meta.env.VITE_MAILING_ADDRESS as string,
   effectiveDate: import.meta.env.VITE_EFFECTIVE_DATE as string,
-  backupRetentionDays: (import.meta.env.VITE_BACKUP_RETENTION_DAYS as string) || '30',
+  backupRetentionDays: (import.meta.env.VITE_BACKUP_RETENTION_DAYS as string) || '7',
   endpoint: import.meta.env.VITE_APPWRITE_ENDPOINT as string,
   projectId: import.meta.env.VITE_APPWRITE_PROJECT_ID as string,
   functionId: (import.meta.env.VITE_APPWRITE_API_FUNCTION_ID as string) || 'diary-api',
