@@ -10,11 +10,11 @@
     "test": "node --test --experimental-strip-types test/*.test.ts"
   },
   "dependencies": {
-    "appwrite": "26.2.0"
+    "appwrite": "27.0.0"
   },
   "devDependencies": {
     "@types/node": "26.1.1",
     "typescript": "7.0.2",
-    "vite": "8.1.5"
+    "vite": "8.3.0"
   }
 }
